@@ -1,0 +1,11 @@
+[package]
+name = "fileencryptor"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+aes-gcm = "0.10"
+aes = "0.8"
+argon2 = "0.5"
+eframe = "0.31.1"
+rfd = "0.15.3"
