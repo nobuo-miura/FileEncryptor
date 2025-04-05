@@ -1,4 +1,4 @@
-use eframe::{egui, App, Frame, NativeOptions, run_native};
+use eframe::{App, Frame, NativeOptions, egui, run_native};
 use rfd::FileDialog;
 use std::fs;
 
@@ -54,10 +54,12 @@ impl App for EncryptorApp {
 
             ui.horizontal(|ui| {
                 if ui.button("🔒 Encrypt").clicked() {
-                    self.status = encrypt_action(&self.input_path, &self.output_path, &self.password);
+                    self.status =
+                        encrypt_action(&self.input_path, &self.output_path, &self.password);
                 }
                 if ui.button("🔓 Decrypt").clicked() {
-                    self.status = decrypt_action(&self.input_path, &self.output_path, &self.password);
+                    self.status =
+                        decrypt_action(&self.input_path, &self.output_path, &self.password);
                 }
             });
 
@@ -94,16 +96,21 @@ fn decrypt_action(input: &str, output: &str, password: &str) -> String {
 }
 
 fn configure_fonts(ctx: &egui::Context) {
-    use egui::{FontDefinitions, FontFamily::Proportional, FontData};
+    use egui::{FontData, FontDefinitions, FontFamily::Proportional};
 
     let mut fonts = FontDefinitions::default();
 
     fonts.font_data.insert(
         "noto".to_owned(),
-        std::sync::Arc::new(FontData::from_static(include_bytes!("../assets/NotoSansJP-Regular.ttf"))),
+        std::sync::Arc::new(FontData::from_static(include_bytes!(
+            "../assets/NotoSansJP-Regular.ttf"
+        ))),
     );
 
-    fonts.families.get_mut(&Proportional).unwrap()
+    fonts
+        .families
+        .get_mut(&Proportional)
+        .unwrap()
         .insert(0, "noto".to_owned());
 
     ctx.set_fonts(fonts);

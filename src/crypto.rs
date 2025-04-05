@@ -1,13 +1,15 @@
-use aes_gcm::{Aes256Gcm, KeyInit, Nonce};
 use aes_gcm::aead::{Aead, OsRng, rand_core::RngCore};
-use argon2::{Argon2, PasswordHasher, password_hash::{SaltString}};
+use aes_gcm::{Aes256Gcm, KeyInit, Nonce};
+use argon2::{Argon2, PasswordHasher, password_hash::SaltString};
 
 pub fn derive_key_from_password(password: &str, salt: &[u8]) -> [u8; 32] {
     let mut key = [0u8; 32];
     let argon2 = Argon2::default();
 
     let salt_str = SaltString::encode_b64(salt).unwrap();
-    let hash = argon2.hash_password(password.as_bytes(), &salt_str).unwrap();
+    let hash = argon2
+        .hash_password(password.as_bytes(), &salt_str)
+        .unwrap();
     let derived = hash.hash.unwrap();
 
     key.copy_from_slice(derived.as_bytes());
@@ -24,7 +26,9 @@ pub fn encrypt_data(plaintext: &[u8], password: &str) -> Vec<u8> {
     let cipher = Aes256Gcm::new(&key.into());
     let nonce = Nonce::from(nonce_bytes);
 
-    let ciphertext = cipher.encrypt(&nonce, plaintext).expect("encryption failed");
+    let ciphertext = cipher
+        .encrypt(&nonce, plaintext)
+        .expect("encryption failed");
 
     // [salt][nonce][ciphertext]
     let mut output = vec![];
@@ -47,5 +51,7 @@ pub fn decrypt_data(encrypted: &[u8], password: &str) -> Result<Vec<u8>, &'stati
     let cipher = Aes256Gcm::new(&key.into());
     let nonce = Nonce::from_slice(nonce_bytes);
 
-    cipher.decrypt(nonce, ciphertext).map_err(|_| "decryption failed")
+    cipher
+        .decrypt(nonce, ciphertext)
+        .map_err(|_| "decryption failed")
 }
