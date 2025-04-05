@@ -7,8 +7,14 @@ use crate::crypto;
 pub fn launch_gui() {
     run_native(
         "Secure File Encryptor",
-        NativeOptions::default(),
-        Box::new(|_cc| Ok(Box::new(EncryptorApp::default()))),
+        NativeOptions {
+            viewport: egui::ViewportBuilder::default().with_inner_size([400.0, 300.0]),
+            ..Default::default()
+        },
+        Box::new(|cc| {
+            configure_fonts(&cc.egui_ctx);
+            Ok(Box::new(EncryptorApp::default()))
+        }),
     )
     .expect("Failed to launch GUI");
 }
@@ -85,4 +91,20 @@ fn decrypt_action(input: &str, output: &str, password: &str) -> String {
         },
         Err(e) => format!("Failed to read input: {}", e),
     }
+}
+
+fn configure_fonts(ctx: &egui::Context) {
+    use egui::{FontDefinitions, FontFamily::Proportional, FontData};
+
+    let mut fonts = FontDefinitions::default();
+
+    fonts.font_data.insert(
+        "noto".to_owned(),
+        std::sync::Arc::new(FontData::from_static(include_bytes!("../assets/NotoSansJP-Regular.ttf"))),
+    );
+
+    fonts.families.get_mut(&Proportional).unwrap()
+        .insert(0, "noto".to_owned());
+
+    ctx.set_fonts(fonts);
 }
