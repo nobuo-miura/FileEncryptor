@@ -33,17 +33,17 @@ impl App for EncryptorApp {
             ui.heading("Secure File Encryptor");
             ui.separator();
 
-            if ui.button("📁 Select Input File").clicked() {
-                if let Some(path) = FileDialog::new().pick_file() {
-                    self.input_path = path.display().to_string();
-                }
+            if ui.button("📁 Select Input File").clicked()
+                && let Some(path) = FileDialog::new().pick_file()
+            {
+                self.input_path = path.display().to_string();
             }
             ui.label(format!("Input: {}", self.input_path));
 
-            if ui.button("💾 Select Output File").clicked() {
-                if let Some(path) = FileDialog::new().save_file() {
-                    self.output_path = path.display().to_string();
-                }
+            if ui.button("💾 Select Output File").clicked()
+                && let Some(path) = FileDialog::new().save_file()
+            {
+                self.output_path = path.display().to_string();
             }
             ui.label(format!("Output: {}", self.output_path));
 
