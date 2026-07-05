@@ -1,3 +1,7 @@
+# FileEncryptor
+
+[English](README.md) | [日本語](README.ja.md)
+
 A secure and user-friendly file encryption and decryption tool built with Rust.  
 Supports both a command-line interface (CLI) and a graphical user interface (GUI).
 
